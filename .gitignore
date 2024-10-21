@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+npm-debug.log
+
+# Environment variables
+.env
+
+# Build files
+frontend/dist/
+
+# Cache
+backend/cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
