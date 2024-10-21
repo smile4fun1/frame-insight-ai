@@ -91,6 +91,7 @@ function App() {
       setAnalysisTypes(response.data);
     } catch (error) {
       console.error('Error fetching analysis types:', error);
+      setError('Failed to fetch analysis types. Please try refreshing the page.');
     }
   };
 
@@ -125,6 +126,7 @@ function App() {
     setLoading(true);
     setError(null);
     setResult(null);
+    setProgress(0);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -143,7 +145,8 @@ function App() {
       });
       setResult(response.data);
     } catch (error) {
-      setError(error.response?.data?.detail || 'An error occurred during processing');
+      console.error('Error during file upload:', error);
+      setError(error.response?.data?.detail || 'An error occurred during processing. Please try again.');
     } finally {
       setLoading(false);
     }
