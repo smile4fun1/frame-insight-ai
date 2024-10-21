@@ -6,7 +6,7 @@ import { faRobot, faSpinner, faUpload, faFileVideo, faCopy, faTrashAlt, faEnvelo
 import { faTwitter, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
-const BACKEND_URL = 'https://video-to-prompt.onrender.com';
+const BACKEND_URL = 'https://frame-insight-ai.onrender.com/';
 
 const loadingMessages = [
   "Initializing neural network pathways...",
