@@ -91,7 +91,7 @@ function App() {
       console.log('Fetching analysis types from:', `${BACKEND_URL}/analysis_types`);
       const response = await axios.get(`${BACKEND_URL}/analysis_types`, {
         timeout: 10000,
-        withCredentials: false, // Add this line
+        withCredentials: false,
       });
       console.log('Analysis types response:', response.data);
       setAnalysisTypes(response.data);
@@ -268,48 +268,52 @@ function App() {
             <h1>FrameInsight AI</h1>
           </div>
         </header>
-        <form onSubmit={handleSubmit} className="upload-form">
-          <div className="form-group">
-            <label htmlFor="file-upload">
-              <FontAwesomeIcon icon={faFileVideo} /> Select Video File:
-            </label>
-            <input
-              id="file-upload"
-              type="file"
-              onChange={(e) => setFile(e.target.files[0])}
-              accept="video/*"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="analysis-type">Select Analysis Type:</label>
-            <select
-              id="analysis-type"
-              value={analysisType}
-              onChange={(e) => setAnalysisType(e.target.value)}
-            >
-              {Object.entries(analysisTypes).map(([key, value]) => (
-                <option key={key} value={key}>{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</option>
-              ))}
-            </select>
-          </div>
-          {renderAnalysisTypeDescription(analysisType)}
-          <div className="button-group">
-            <button type="submit" disabled={loading}>
-              {loading ? (
-                <>
-                  <FontAwesomeIcon icon={faSpinner} spin /> Processing...
-                </>
-              ) : (
-                <>
-                  <FontAwesomeIcon icon={faUpload} /> Upload and Analyze
-                </>
-              )}
-            </button>
-            <button onClick={clearCache} className="clear-cache-btn" type="button">
-              <FontAwesomeIcon icon={faTrashAlt} /> Clear Cache
-            </button>
-          </div>
-        </form>
+        {Object.keys(analysisTypes).length > 0 ? (
+          <form onSubmit={handleSubmit} className="upload-form">
+            <div className="form-group">
+              <label htmlFor="file-upload">
+                <FontAwesomeIcon icon={faFileVideo} /> Select Video File:
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                onChange={(e) => setFile(e.target.files[0])}
+                accept="video/*"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="analysis-type">Select Analysis Type:</label>
+              <select
+                id="analysis-type"
+                value={analysisType}
+                onChange={(e) => setAnalysisType(e.target.value)}
+              >
+                {Object.entries(analysisTypes).map(([key, value]) => (
+                  <option key={key} value={key}>{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</option>
+                ))}
+              </select>
+            </div>
+            {renderAnalysisTypeDescription(analysisType)}
+            <div className="button-group">
+              <button type="submit" disabled={loading}>
+                {loading ? (
+                  <>
+                    <FontAwesomeIcon icon={faSpinner} spin /> Processing...
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faUpload} /> Upload and Analyze
+                  </>
+                )}
+              </button>
+              <button onClick={clearCache} className="clear-cache-btn" type="button">
+                <FontAwesomeIcon icon={faTrashAlt} /> Clear Cache
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p>Loading analysis types...</p>
+        )}
         {loading && (
           <div className="loading-container">
             <div className="loading-spinner">

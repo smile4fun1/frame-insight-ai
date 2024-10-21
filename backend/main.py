@@ -32,7 +32,7 @@ app = FastAPI()
 # Update the CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for debugging
+    allow_origins=["https://frame-insight-ai.vercel.app", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -293,6 +293,7 @@ async def upload_video(
 @app.get("/analysis_types")
 async def get_analysis_types():
     logger.info("Received request for analysis types")
+    logger.debug(f"Returning analysis types: {ANALYSIS_TYPES}")
     return ANALYSIS_TYPES
 
 @app.get("/download/{format}/{cache_key}")
