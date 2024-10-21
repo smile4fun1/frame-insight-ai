@@ -19,6 +19,11 @@ from openai import OpenAI
 import time
 import io
 import textwrap
+import logging
+
+# Add this near the top of the file, after the imports
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -27,7 +32,7 @@ app = FastAPI()
 # Update the CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://frame-insight-ai.vercel.app/", "http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["*"],  # Allow all origins for debugging
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -287,7 +292,8 @@ async def upload_video(
 
 @app.get("/analysis_types")
 async def get_analysis_types():
-    return JSONResponse(ANALYSIS_TYPES)
+    logger.info("Received request for analysis types")
+    return ANALYSIS_TYPES
 
 @app.get("/download/{format}/{cache_key}")
 async def download_result(format: str, cache_key: str):
@@ -324,6 +330,17 @@ async def clear_cache():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to clear cache: {str(e)}")
 
+@app.get("/health")
+async def health_check():
+    logger.info("Health check endpoint accessed")
+    return {"status": "ok"}
+
+@app.get("/")
+async def root():
+    logger.info("Root endpoint accessed")
+    return {"message": "Welcome to FrameInsight AI API"}
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    logger.info("Starting the FastAPI application")
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))

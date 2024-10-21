@@ -6,7 +6,7 @@ import { faRobot, faSpinner, faUpload, faFileVideo, faCopy, faTrashAlt, faEnvelo
 import { faTwitter, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
-const BACKEND_URL = 'https://frame-insight-ai.onrender.com/';
+const BACKEND_URL = 'https://frame-insight-ai.onrender.com';
 
 const loadingMessages = [
   "Initializing neural network pathways...",
@@ -32,6 +32,7 @@ function App() {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
+    console.log('Fetching analysis types...');
     fetchAnalysisTypes();
   }, []);
 
@@ -87,11 +88,25 @@ function App() {
 
   const fetchAnalysisTypes = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/analysis_types`);
+      console.log('Fetching analysis types from:', `${BACKEND_URL}/analysis_types`);
+      const response = await axios.get(`${BACKEND_URL}/analysis_types`, {
+        timeout: 10000,
+        withCredentials: false, // Add this line
+      });
+      console.log('Analysis types response:', response.data);
       setAnalysisTypes(response.data);
     } catch (error) {
       console.error('Error fetching analysis types:', error);
-      setError('Failed to fetch analysis types. Please try refreshing the page.');
+      if (error.response) {
+        console.error('Error data:', error.response.data);
+        console.error('Error status:', error.response.status);
+        console.error('Error headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
+      setError(`Failed to fetch analysis types. Error: ${error.message}`);
     }
   };
 
